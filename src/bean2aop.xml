@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--使用aop-->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--1、配置对象-->
+    <bean id="book" class="com.ahn.aop.Book"></bean>
+    <bean id="myBook" class="com.ahn.aop.MyBook"></bean>
+    <!--2、配置aop操作-->
+    <aop:config>
+        <!--3、配置切点（需要增强的方法）
+            id:为此切点起一个名称
+            expression：表达式，配置需要增强的方法路径 类名后面的*号表示多个方法可作为切点-->
+        <aop:pointcut id="pc1" expression="execution(* com.ahn.aop.Book.*(..))"></aop:pointcut>
+
+        <!--4、配置切面 将增强用到方法上面-->
+        <!--ref:来源，即增强的类-->
+        <aop:aspect ref="myBook">
+            <!--配置增强类型
+            method即为增强类哪个方法作为前置-->
+            <aop:before method="testBefore" pointcut-ref="pc1"></aop:before>
+            <!--后置增强-->
+            <aop:after-returning method="testAfter" pointcut-ref="pc1"></aop:after-returning>
+            <!--环绕增强-->
+            <aop:around method="testAround" pointcut-ref="pc1"></aop:around>
+        </aop:aspect>
+    </aop:config>
+</beans>
